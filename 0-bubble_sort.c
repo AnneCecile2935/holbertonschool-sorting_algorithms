@@ -22,13 +22,11 @@ void swap(int *a, int *b)
  * Return: Nothing
  */
 void bubble_sort(int *array, size_t size)
-	{
-		unsigned int i, j;
-	
-		if (!array)
-			return;
-	
-		for (i = 0; i < size - 1; i++)
+{
+size_t i, j;
+if (!array)
+return;
+			for (i = 0; i < size - 1; i++)
 		{
 			for (j = 0; j < size - i - 1; j++)
 			{
