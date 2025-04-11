@@ -1,84 +1,93 @@
 #include "sort.h"
+#include <stdio.h>
 
 /**
- * lomuto_partition - Partition the array using Lomuto scheme
- * @array: The array to sort
- * @low: The low index of the partition
- * @high: The high index of the partition
- * @size: The size of the array (for printing)
- * Return: The index of the pivot after partition
+ * _swap - swaps two values in an array
+ *
+ * @array: data to sort
+ * @i: first value
+ * @j: second value
+ * @size: size of data
+ *
+ * Return: No Return
  */
-int lomuto_partition(int *array, int low, int high, size_t size)
+void _swap(int *array, int i, int j, int size)
 {
-	int pivot;
-	int i;
-	int j;
-	int temp;
+	int tmp;
 
-if (array == NULL || low < 0 || high < 0 ||
-(size_t)low >= size || (size_t)high >= size)
-return (-1);
-	pivot = array[high];
-	i = low;
+	if (array[i] != array[j])
+	{
+		tmp = array[i];
+		array[i] = array[j];
+		array[j] = tmp;
+		print_array(array, size);
+	}
+}
 
-	for (j = low; j < high; j++)
+/**
+ * partition - sorts a partition of data in relation to a pivot
+ *
+ * @array: data to sort
+ * @min: Left wall
+ * @max: right wall
+ * @size: size of data
+ *
+ * Return: New Pivot
+ */
+int partition(int *array, int min, int max, size_t size)
+{
+	int i = min, j, pivot  = array[max];
+
+	for (j = min; j <= max; j++)
 	{
 		if (array[j] < pivot)
 		{
-			if (i != j)
-			{
-				temp = array[i];
-				array[i] = array[j];
-				array[j] = temp;
-				print_array(array, size);
-			}
+			_swap(array, i, j, size);
 			i++;
 		}
-	}
 
-	if (i != high && i <= high && (size_t)i < size)
-	{
-		temp = array[i];
-		array[i] = array[high];
-		array[high] = temp;
-		print_array(array, size);
 	}
+	_swap(array, i, max, size);
 
 	return (i);
 }
 
 /**
- * quick_sort_recursive - Recursively pplies quicksort
- * @array: Array to sort
- * @low: Low index
- * @high: High index
- * @size: Size of the array
+ * quicksort -  sorts an array of integers in ascending order using the
+ * Quick sort algorithm Lomuto partition scheme
+ *
+ * @array: data to sort
+ * @min: Left wall
+ * @max: right wall
+ * @size: size of data
+ *
+ * Return: No Return
  */
-void quick_sort_recursive(int *array, int low, int high, size_t size)
+void quicksort(int *array, int min, int max, size_t size)
 {
-	int pi;
-if (array == NULL || low < 0 || high < 0
-	|| (size_t)low >= size || (size_t)high >= size)
-return;
-	if (low < high)
+	int p;
+
+	if (min < max)
 	{
-		pi = lomuto_partition(array, low, high, size);
-		if (pi == -1)
-		return;
-		quick_sort_recursive(array, low, pi - 1, size);
-		quick_sort_recursive(array, pi + 1, high, size);
+		p = partition(array, min, max, size);
+		quicksort(array, min, p - 1, size);
+		quicksort(array, p + 1, max, size);
 	}
 }
 
 /**
- * quick_sort - Sorts array using quick sort algorithm (Lomuto scheme)
- * @array: Array to sort
- * @size: Size of the array
+ * quick_sort -  sorts an array of integers in ascending order using the
+ * Quick sort algorithm Lomuto partition scheme
+ *
+ * @array: data to sort
+ * @size: size of data
+ *
+ * Return: No Return
  */
 void quick_sort(int *array, size_t size)
 {
-	if (array == NULL || size < 2)
+	if (size < 2)
 		return;
 
-	quick_sort_recursive(array, 0, size - 1, size);
+	quicksort(array, 0, size - 1, size);
 }
